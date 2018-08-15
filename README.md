@@ -20,8 +20,13 @@ This script is based on my server which uses the following
 ```
 
 ### Installing
+A few variables must match in your service file and the [backup.sh](../backup.sh) script. They are:
+```
+The name of the screen:
 
-A step by step series of examples that tell you how to get a development env running
+If you use the "$savemethod = n" method in the script it relies on having your server run via a service it's important the -S screen name in your service file matches the $screensession variable in the script
+
+Take a look at the minecraft-service.service file and either use it with your server specifics (source path, screensession name, java -jar command line options, etc...) or take note of the fields that are
 
 Say what the step will be
 
