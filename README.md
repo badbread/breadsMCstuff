@@ -12,7 +12,7 @@ This script is based on my server which uses the following:
 
 ```
 - Linux server (Debian 9 or Ubuntu) already running a [PaperMC](https://github.com/PaperMC/Paper) server
-- Minecraft server running via a service ([example service file](minecraft-service.service))
+- Minecraft server running via a service [example service file](minecraft-service.service)
 - Permissions to start/stop the service without a password prompt (lookup sudoers)
 - (Temporary) A pushover account from pushover.net (hoping to remove this Dependency soon)
 
