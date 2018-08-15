@@ -3,7 +3,7 @@
 # Minecraft Linux server running in a screen installed as a service
 # The user running this script needs permissions to start/stop the Minecraft Server
 # service using sudo without a password prompt (lookup sudoers on google)
-PATH=/opt/minecraft/
+PATH=/opt/minecraft/ #set this to the path you save this file in
 
 ###### Mandatory fields, fill this all in ####################################
 source="" #directory to be archived ex: /opt/minecraft/
