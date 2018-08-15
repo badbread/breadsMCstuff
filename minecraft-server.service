@@ -1,3 +1,8 @@
+# This is an example of the service file I use for my Server
+# There are a bunch of mandatory values you must change in here
+
+
+
 [Unit]
 Description=minecraft-server
 
@@ -7,7 +12,12 @@ User=mc # change this to your server username (dont use root!)
 Group=mc # change this to your server group
 Type=forking
 
-# the below server launch parameters taken from Aikar here: https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/
+# the below server launch parameters I use taken from Aikar here: https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/
+# you must change a few things in the "ExecStart" command
+# change: after "-dmS" you must change "mc" to whatever your screen session is/should be
+# change: "-Xms6G" & "-Xmx6G" How much memory you allocate to Java
+
+
 ExecStart=/usr/bin/screen -h 2048 -dmS mc java -Xms6G -Xmx6G -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=100 -XX:+DisableExplicitGC -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=50 -XX:G1MaxNewSizePercent=80 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1MixedGCLiveThresholdPercent=50 -XX:+AggressiveOpts -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -Dusing.aikars.flags=mcflags.emc.gs -jar /minecraft/paperclip.jar
 ExecStop=/usr/bin/screen -S mc -X eval 'stuff "say SERVER SHUTTING DOWN in 10 seconds!"\\015'
 ExecStop=/bin/sleep 10
