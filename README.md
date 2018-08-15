@@ -10,14 +10,17 @@ These instructions will get you a copy of the project up and running on your loc
 
 This script is based on my server which uses the following:
 
-```
+
 - Linux server (Debian 9 or Ubuntu) already running a [PaperMC](https://github.com/PaperMC/Paper) server
-- Minecraft server running via a service [example service file](minecraft-service.service)
-- Permissions to start/stop the service without a password prompt (lookup sudoers)
+- Server running via a service [minecraft-server.service](./minecraft-service.service)
+- Server running in Linux [screen](https://linux.die.net/man/1/screen)
+- Permissions to start/stop the service without a password prompt (lookup [sudoers](https://linux.die.net/man/5/sudoers))
+'''bash
+minecraft ALL=NOPASSWD:/usr/sbin/service minecraft-server stop
+minecraft ALL=NOPASSWD:/usr/sbin/service minecraft-server start
+''''
 - (Temporary) A pushover account from pushover.net (hoping to remove this Dependency soon)
 
-
-```
 
 ### Installing
 A few variables must match in your service file and the [backup.sh](./backup.sh) script. They are:
