@@ -82,7 +82,7 @@ stopserver () {
       log "Minecraft server is running"
         if [ $savemethod = "y" ]
           then
-            log "Minecraft server is running, sending the save-off command to server"
+            log "Sending the save-off command to server"
             screen -S mcserver -X eval 'stuff "say Server save in progress, might be laggy for a bit"\\015'
             screen -S mcserver -X eval 'stuff "save-off"\\015'
             log "Save-off command sent to MC, moving to create_archive"
