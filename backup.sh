@@ -116,9 +116,8 @@ create_archive () {
   if [ -e $fullarchivename ]
     then
       log "Archive already exists $fullarchivename! Stopping backup!" ERROR
-      push "ERROR backing up Minecraft, restarting server, check the logs!! "
-      sudo service $servicename start
-      exit
+      push "ERROR backing up Minecraft, going to startserver function, check the logs!! "
+      startserver
     else
       log "Creating archive of directory"
       timethis "tar cfj $fullarchivename $source"
@@ -195,7 +194,6 @@ startserver () {
       screen -S mcserver -X eval 'stuff "say Backup has completed!!"\\015'
       log "Save-on command sent to MC, BACKUP COMPLETE in $runtime2 seconds! ****************************"
       push "Backup completed, all good."
-      quit
   elif [ $savemethod = "n" ]
   then
     log "Backup has been completed, BACKUP COMPLETE in $runtime2 seconds!! ******************************"
