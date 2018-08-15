@@ -8,19 +8,19 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-This script is based on my server which uses the following
+This script is based on my server which uses the following:
 
 ```
-• Linux server (Debian 9 or Ubuntu) already running a PaperMC server
-• Minecraft server that runs via a service (example service file in github)
-• Permissions to start/stop the service without a password prompt (lookup sudoers)
-• (Temporary) A pushover account from pushover.net (hoping to remove this Dependency soon)
+- Linux server (Debian 9 or Ubuntu) already running a [PaperMC](https://github.com/PaperMC/Paper) server
+- Minecraft server running via a service ([example service file](minecraft-service.service))
+- Permissions to start/stop the service without a password prompt (lookup sudoers)
+- (Temporary) A pushover account from pushover.net (hoping to remove this Dependency soon)
 
 
 ```
 
 ### Installing
-A few variables must match in your service file and the [backup.sh](../backup.sh) script. They are:
+A few variables must match in your service file and the [backup.sh](./backup.sh) script. They are:
 ```
 The name of the screen:
 
