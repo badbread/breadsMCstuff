@@ -20,7 +20,7 @@ daystokeep="+7" #how many days to keep BACKUP files, must have + sign before num
 paperupdateinterval="+5" #how many days old the paperclip.jar file needs to be to be upgraded
 paperclipjartime="+30" #how many days to keep old paperclip.jar files
 tries="10" #how long to wait for server to close before giving up "value = *2"
-
+log_file=$dest"log.txt" #place the log file where the backup files go and name it
 ###### Pushover variables ####################################################
 pushtoken=""
 pushuser=""
@@ -33,7 +33,7 @@ archivename=$day$archiveend #archive file name
 fullarchivename=$dest$archivename #full archive file path
 jarbackups=$source.jarbackups/
 yesterday=$(date +%m%d%Y -d 'yesterday') #for old .jar file deletion and rename
-log_file=$dest"log.txt" #place the log file where the backup files go
+
 
 ###### utility functions ####################################################
 
