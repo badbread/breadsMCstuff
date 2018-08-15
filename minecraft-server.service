@@ -1,0 +1,23 @@
+[Unit]
+Description=minecraft-server
+
+[Service]
+WorkingDirectory=/minecraft # change this to your server game directory
+User=mc # change this to your server username (dont use root!)
+Group=mc # change this to your server group
+Type=forking
+
+# the below server launch parameters taken from Aikar here: https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/
+ExecStart=/usr/bin/screen -h 2048 -dmS mc java -Xms6G -Xmx6G -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=100 -XX:+DisableExplicitGC -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=50 -XX:G1MaxNewSizePercent=80 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1MixedGCLiveThresholdPercent=50 -XX:+AggressiveOpts -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -Dusing.aikars.flags=mcflags.emc.gs -jar /minecraft/paperclip.jar
+ExecStop=/usr/bin/screen -S mc -X eval 'stuff "say SERVER SHUTTING DOWN in 10 seconds!"\\015'
+ExecStop=/bin/sleep 10
+ExecStop=/usr/bin/screen -S mc -X eval 'stuff "stop"\\015'
+ExecStop=/bin/sleep 3
+
+Restart=on-failure
+
+RestartSec=60s
+
+
+[Install]
+WantedBy=multi-user.target
