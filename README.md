@@ -24,58 +24,18 @@ minecraft ALL=NOPASSWD:/usr/sbin/service minecraft-server start
 - (Temporary) A pushover account from pushover.net (hoping to remove this Dependency soon), in the meantime you can comment out any "push" code in there
 
 
-### Installing
-A few variables must match in your service file and the [backup.sh](./backup.sh) script.
+### Mandatory things to change
+A few variables must match exactly in your service file and the [backup.sh](./backup.sh) script.
 
-They are:
 1. If your service file name is *"minecraft-server.service"* then the _**servicename**_ variable in the [backup.sh](./backup.sh) script will be ```servicename="minecraft-server"``` 
 2. In your service file, the name of the screen in this command ```ExecStart=/usr/bin/screen -h 2048 -dmS SCREENNAME java ``` must match the screenname variable in the [backup.sh](./backup.sh) script. Using this as an example your [backup.sh](./backup.sh) script _**screenname**_ variable will be ```screenname=SCREENNAME```
 
-First setup your service: [minecraft-server.service](./minecraft-service.service)
-
-The name of the screen:
-
-If you use the "$savemethod = n" method in the script it relies on having your server run via a service it's important the -S screen name in your service file matches the $screensession variable in the script
-
-Take a look at the minecraft-service.service file and either use it with your server specifics (source path, screensession name, java -jar command line options, etc...) or take note of the fields that are
-
-Say what the step will be
-
+### User Options aka other variables to setup:
+3. _**savemethod**_ = 'y' or 'n'
 ```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
+This determines if the script will send a _stop-save_ command to the server or a _stop_ to the server
+Note if you want the server to auto upgrade this variable must be set to __'y'__
+````
 
 ## Built With
 
