@@ -1,18 +1,17 @@
 # breadsMCbackup
 
-A pretty simple script to backup your entire LINUX Minecraft Server directory to another directory of your choice. It can also auto-update to the latest version of Paper (github.com/PaperMC/Paper) after 'x' number of days. It has some error checking, logs everything it does, auto-deletes old backups after 'x' days and the ability to alert using Pushover (www.pushover.net).
+A pretty simple script to backup your entire LINUX Minecraft Server directory to another directory of your choice. It can also auto-update to the latest version of Paper (github.com/PaperMC/Paper) after 'x' number of days. It has some error checking, logs everything it does, auto-deletes old backups after 'x' days and has the ability to alert using Pushover (www.pushover.net).
 
-## Getting Started
+## Why and Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+Hopefully you'll find this script of some use, this all started when my personal server crashed and I lost everything. It started on a windows machine with a batch file backup job to a NAS, then to powershell script because I didn't like .bat logging, and now to a full blown ESXi VM with nightly backups and automated updates.
 
 ### Prerequisites
 
 This script is based on my server which uses the following:
 
-
 - Linux server (Debian 9 or Ubuntu) already running a [PaperMC](https://github.com/PaperMC/Paper) server
-- Server running via a service [minecraft-server.service](./minecraft-service.service)
+- Server running via a service: [minecraft-server.server](./minecraft-server.service)
 - Server running in Linux [screen](https://linux.die.net/man/1/screen)
 - Permissions to start/stop the service without a password prompt (lookup [sudoers](https://linux.die.net/man/5/sudoers))
 ```
@@ -22,17 +21,17 @@ This script is based on my server which uses the following:
 minecraft ALL=NOPASSWD:/usr/sbin/service minecraft-server stop
 minecraft ALL=NOPASSWD:/usr/sbin/service minecraft-server start
 ```
-- (Temporary) A pushover account from pushover.net (hoping to remove this Dependency soon)
+- (Temporary) A pushover account from pushover.net (hoping to remove this Dependency soon), in the meantime you can comment out any "push" code in there
 
 
 ### Installing
 A few variables must match in your service file and the [backup.sh](./backup.sh) script.
 
 They are:
-- In the service-name.service file
--- The actual name of the file, in this example "minecraft-server.service"
+1. The name of the service
+- The actual name of the file determines what your service will be called. In this script it's "minecraft-server.service" which = minecraft-server
 - In the backup.sh file
--- the variable at the top called $servicename
+- the variable at the top called $servicename
 
 First setup your service: [minecraft-server.service](./minecraft-service.service)
 '''systemd
