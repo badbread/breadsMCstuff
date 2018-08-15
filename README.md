@@ -15,10 +15,10 @@ This script is based on my server which uses the following:
 - Server running via a service [minecraft-server.service](./minecraft-service.service)
 - Server running in Linux [screen](https://linux.die.net/man/1/screen)
 - Permissions to start/stop the service without a password prompt (lookup [sudoers](https://linux.die.net/man/5/sudoers))
-'''bash
+```systemd
 minecraft ALL=NOPASSWD:/usr/sbin/service minecraft-server stop
 minecraft ALL=NOPASSWD:/usr/sbin/service minecraft-server start
-''''
+```
 - (Temporary) A pushover account from pushover.net (hoping to remove this Dependency soon)
 
 
