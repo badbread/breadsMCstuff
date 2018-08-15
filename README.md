@@ -24,24 +24,37 @@ minecraft ALL=NOPASSWD:/usr/sbin/service minecraft-server start
 - (Temporary) A pushover account from pushover.net (hoping to remove this Dependency soon), in the meantime you can comment out any "push" code in there
 
 
-### Mandatory things to change
+### Mandatory items
 A few variables must match exactly in your service file and the [backup.sh](./backup.sh) script.
 
-1. If your service file name is *"minecraft-server.service"* then the _**servicename**_ variable in the [backup.sh](./backup.sh) script will be ```servicename="minecraft-server"``` 
-2. In your service file, the name of the screen in this command ```ExecStart=/usr/bin/screen -h 2048 -dmS SCREENNAME java ``` must match the screenname variable in the [backup.sh](./backup.sh) script. Using this as an example your [backup.sh](./backup.sh) script _**screenname**_ variable will be ```screenname=SCREENNAME```
+1. If your service file name is *"minecraft-server.service"* then the _**servicename**_ variable in the [backup.sh](./backup.sh) script will be ```servicename="minecraft-server"```
+2. In your service file, the name of the screen in this command for example ```ExecStart=/usr/bin/screen -h 2048 -dmS SCREENNAME java ``` must match the screenname variable in the [backup.sh](./backup.sh) script. Using this as an example your [backup.sh](./backup.sh) script _**screenname**_ variable will be ```screenname=SCREENNAME```
+3. _**source**_ = the directory to be backed up (ex: /somedir/minecraft)
+4. _**dest**_ = where the archive files will be placed (ex: /mnt/someNASdevice/minecraftbackup)
+5. _**savemethod**_ = 'y' or 'n'
+- This determines if the script will send a _stop-save_ command (the __'y'__ option) to the server or a _stop_ (the __'n'__ option) to the server
+  - Note if you want the server to auto upgrade this variable must be set to __'n'__
+6. If you plan on using the automatic update part, create a directory in your _**source**_ folder called .jarbackups
+   - ``` mkdir .jarbackups/ ```
+   - This is a hidden folder the old paperclip.jar files live in for x (30 by default) days before being automatically deleted
 
-### User Options aka other variables to setup:
-3. _**savemethod**_ = 'y' or 'n'
-```
-This determines if the script will send a _stop-save_ command to the server or a _stop_ to the server
-Note if you want the server to auto upgrade this variable must be set to __'y'__
-````
+### Optional items
+
+1. _**daystokeep**_ = how many days to keep backup files in the $dest (default "+7")
+    - Note that the + sign needs to be in front, same goes for the variables below except "tries"
+2. _**paperclipupdateinterval**_ = how many days old the paperclip.jar file needs to be before it's updated (default is "+5")
+3. _**paperclipjartime**_ = how many days to keep the old replaced paperclip.jar files in the .jarbackups folder before deleting them (default is +30)
+4. _**tries**_ = this probably isn't needed anymore, description in script.
+5. _**log_file**_ = what the logfile is called and where it's stored (default $dest"log.txt")
+
+### Pushover variables
+1. _**pushtoken**_ = Your pushover API key
+2. _**pushuser**_ = Your pushover user key
+3. _**pushsubject**_ = Subject of the push (Minecraft server alert)
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* BASH
 
 ## Contributing
 
@@ -53,7 +66,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **badbread** - *Initial work* - [badbread](https://github.com/badbread)
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
@@ -63,6 +76,5 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+[Mike Buss](https://github.com/mikebuss) for the super simple pushover function [here](https://mikebuss.com/2014/01/03/push-notifications-cli/)
+
