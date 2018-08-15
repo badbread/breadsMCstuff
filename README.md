@@ -28,16 +28,10 @@ minecraft ALL=NOPASSWD:/usr/sbin/service minecraft-server start
 A few variables must match in your service file and the [backup.sh](./backup.sh) script.
 
 They are:
-1. The name of the service
-- The actual name of the file determines what your service will be called. In this script it's "minecraft-server.service" which = minecraft-server
-- In the backup.sh file
-- the variable at the top called $servicename
+1. If your service file name is *"minecraft-server.service"* then the _**servicename**_ variable in the [backup.sh](./backup.sh) script will be ```servicename="minecraft-server"``` 
+2. In your service file, the name of the screen in this command ```ExecStart=/usr/bin/screen -h 2048 -dmS SCREENNAME java ``` must match the screenname variable in the [backup.sh](./backup.sh) script. Using this as an example your [backup.sh](./backup.sh) script _**screenname**_ variable will be ```screenname=SCREENNAME```
 
 First setup your service: [minecraft-server.service](./minecraft-service.service)
-'''systemd
-
-
-'''
 
 The name of the screen:
 
