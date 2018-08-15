@@ -10,8 +10,8 @@ source="" #directory to be archived ex: /opt/minecraft/
 dest="" #destination for archive ex: /mnt/mcLinuxBackup/
 savemethod="y"  # savemethod does not stop/start the server, sends a "save-off" command
                 # to the server
-servicename="" # ex: minecraft-server
-screensession="" #name of your screen session ex: mcserver
+servicename="" # ex: minecraft-server must match the name of your Minecraft server service
+screensession="" #name of your screen session that the service launches
 # Make a directory in /minecraft folder called ".jarbackups" it's a hidden folder
 # to place a backup of your old paperclip.jar file
 
