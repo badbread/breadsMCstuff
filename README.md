@@ -15,7 +15,10 @@ This script is based on my server which uses the following:
 - Server running via a service [minecraft-server.service](./minecraft-service.service)
 - Server running in Linux [screen](https://linux.die.net/man/1/screen)
 - Permissions to start/stop the service without a password prompt (lookup [sudoers](https://linux.die.net/man/5/sudoers))
-```systemd
+```
+"username" ALL=NOPASSWD:/usr/sbin/service "service file name" start
+"username" ALL=NOPASSWD:/usr/sbin/service "service file name" stop
+
 minecraft ALL=NOPASSWD:/usr/sbin/service minecraft-server stop
 minecraft ALL=NOPASSWD:/usr/sbin/service minecraft-server start
 ```
@@ -23,8 +26,20 @@ minecraft ALL=NOPASSWD:/usr/sbin/service minecraft-server start
 
 
 ### Installing
-A few variables must match in your service file and the [backup.sh](./backup.sh) script. They are:
-```
+A few variables must match in your service file and the [backup.sh](./backup.sh) script.
+
+They are:
+- In the service-name.service file
+-- The actual name of the file, in this example "minecraft-server.service"
+- In the backup.sh file
+-- the variable at the top called $servicename
+
+First setup your service: [minecraft-server.service](./minecraft-service.service)
+'''systemd
+
+
+'''
+
 The name of the screen:
 
 If you use the "$savemethod = n" method in the script it relies on having your server run via a service it's important the -S screen name in your service file matches the $screensession variable in the script
