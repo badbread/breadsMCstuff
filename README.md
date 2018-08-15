@@ -11,10 +11,10 @@ These instructions will get you a copy of the project up and running on your loc
 This script is based on my server which uses the following
 
 ```
-•A Linux server (Debian 9 or Ubuntu) already running a PaperMC server
-•A Minecraft server that runs via a service (example service file in github)
-•A Permissions to start/stop the service without a password prompt (lookup sudoers)
-•A (Temporary) A pushover account from pushover.net (hoping to remove this Dependency soon)
+• Linux server (Debian 9 or Ubuntu) already running a PaperMC server
+• Minecraft server that runs via a service (example service file in github)
+• Permissions to start/stop the service without a password prompt (lookup sudoers)
+• (Temporary) A pushover account from pushover.net (hoping to remove this Dependency soon)
 
 
 ```
