@@ -16,11 +16,13 @@ screensession="" #name of your screen session that the service launches
 # to place a backup of your old paperclip.jar file
 
 ##### Options ################################################################
+autoupdate="n"
 daystokeep="+7" #how many days to keep BACKUP files, must have + sign before number for next 3
 paperupdateinterval="+5" #how many days old the paperclip.jar file needs to be to be upgraded
 paperclipjartime="+30" #how many days to keep old paperclip.jar files
 tries="10" #how long to wait for server to close before giving up "value = *2"
 log_file=$dest"log.txt" #place the log file where the backup files go and name it
+
 ###### Pushover variables ####################################################
 pushtoken=""
 pushuser=""
@@ -33,7 +35,6 @@ archivename=$day$archiveend #archive file name
 fullarchivename=$dest$archivename #full archive file path
 jarbackups=$source.jarbackups/
 yesterday=$(date +%m%d%Y -d 'yesterday') #for old .jar file deletion and rename
-
 
 ###### utility functions ####################################################
 
@@ -101,9 +102,9 @@ stopserver () {
                     log "Waiting for screen session to close down, attempt $count (max tries is $tries)"
                   done
                 create_archive
-              else
-                log "Please enter y or n in the $savemethod variable" ERROR
-                quit
+#              else
+#                log "Please enter y or n in the $savemethod variable" ERROR
+#                quit
               fi
     else
          log "Minecraft server is NOT running, continuing to create_archive" WARNING
@@ -141,19 +142,25 @@ deloldbackups () {
       log "No old backup files to delete"
   fi
 
-  if [[ $(find "$jarbackups" -type f -mtime "$paperclipjartime") ]]
+  if [ $autoupdate = "y" ]
     then
-      log "Deleting paperclip.jar files older than $paperclipjartime days"
-      find $jarbackups -name 'paperclip*' -type f -mtime $paperclipjartime | while read fname; do
-        log "Deleting $fname"
-        rm "$fname"
-        updateserver
-      done
-    else
-      log "No old paperclip.jar files to delete"
-    updateserver
-    #add autoupdate if condition here
-  fi
+      if [[ $(find "$jarbackups" -type f -mtime "$paperclipjartime") ]]
+        then
+          log "Deleting paperclip.jar files older than $paperclipjartime days"
+          find $jarbackups -name 'paperclip*' -type f -mtime $paperclipjartime | while read fname; do
+            log "Deleting $fname"
+            rm "$fname"
+            updateserver
+          done
+        else
+          log "No old paperclip.jar files to delete"
+          updateserver
+          #add autoupdate if condition here
+        fi
+    else [ $autoupdate = "n" ]
+      log "Autoupdate function set to NO, going to start server"
+      startserver
+    fi
 }
 
 #Step 4a, check if an X old version of paperclip exists, if it does, rename it, move it to a backup folder
@@ -180,8 +187,8 @@ updateserver () {
           log "No old paperclip found or it hasn't been $paperupdateinterval days yet, not auto-updating... Starting server"
           startserver
       fi
-    else
-      log "I should hopefully never see this error because if it's here, then something is really messed up" ERROR
+#    else
+#      log "I should hopefully never see this error because if it's here, then something is really messed up" ERROR
     fi
 }
 
@@ -202,9 +209,20 @@ startserver () {
   fi
 }
 
+#Check variables before continuing
 
-#start of the log file and backup process
-start2=`date +%s`
-log "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+"
-log "Backup started"
-stopserver
+if [ $savemethod = "y" ] || [ $savemethod = "n" ]
+  then
+    if [ $autoupdate ="y" ] || [ $autoupdate = "n" ]
+      then
+        #start of the log file and backup process
+        start2=`date +%s`
+        log "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+"
+        log "Backup started"
+        stopserver
+      else
+        echo "ERROR! Change the autoupdate variable to a \"y\" or a \"n\""
+      fi
+  else
+    echo "ERROR! Change the savemethod variable to a \"y\" or a \"n\""
+fi
