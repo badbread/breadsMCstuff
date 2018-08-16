@@ -1,8 +1,8 @@
 # breadsMCtools
 
 A small collection (for now) of things I use on my minecraft server. 
-- backup.sh A pretty simple script to backup your entire LINUX Minecraft Server directory to another directory of your choice. It can also auto-update to the latest version of Paper (github.com/PaperMC/Paper) after 'x' number of days. It has some error checking, logs everything it does, auto-deletes old backups after 'x' days and has the ability to alert using Pushover (www.pushover.net).
-- minecraft-server.service - A Linux service file to run your PaperMC server in a screen session
+- ```backup.sh``` A pretty simple script to backup your entire LINUX Minecraft Server directory to another directory of your choice. It can also auto-update to the latest version of Paper (github.com/PaperMC/Paper) after 'x' number of days. It has some error checking, logs everything it does, auto-deletes old backups after 'x' days and has the ability to alert using Pushover (www.pushover.net).
+- ```minecraft-server.service``` - A Linux service file to run your PaperMC server in a screen session
 
 ## Why and Getting Started
 
