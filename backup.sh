@@ -16,6 +16,7 @@ screensession="" #name of your screen session that the service launches
 # to place a backup of your old paperclip.jar file
 
 ##### Options ################################################################
+log="y"
 autoupdate="n"
 daystokeep="+7" #how many days to keep BACKUP files, must have + sign before number for next 3
 paperupdateinterval="+5" #how many days old the paperclip.jar file needs to be to be upgraded
@@ -42,18 +43,34 @@ yesterday=$(date +%m%d%Y -d 'yesterday') #for old .jar file deletion and rename
 # syntax: log "YOUR MESSAGE HERE" [options]
 # Arguments are WARN & ERROR. INFO is passed by default with no argument
 log () {
-  if [ -z "$2" ]
+  if [ log = "y" ]
     then
-      echo "$(date +"%Y%m%d-%T") INFO $1"  | tee -a $log_file
-  elif [ $2 = "WARNING" ]
-     then
-      echo "$(date +"%Y%m%d-%T") WARNING $1" | tee -a $log_file
-  elif [ $2 = "ERROR" ]
-    then
-      echo "$(date +"%Y%m%d-%T") ERROR $1" | tee -a $log_file
-  else
-      echo "$(date +"%Y%m%d-%T") UNKNOWN $1" | tee -a $log_file
-  fi
+      if [ -z "$2" ]
+        then
+          echo "$(date +"%Y%m%d-%T") INFO $1"  | tee -a $log_file
+        elif [ $2 = "WARNING" ]
+        then
+          echo "$(date +"%Y%m%d-%T") WARNING $1" | tee -a $log_file
+        elif [ $2 = "ERROR" ]
+        then
+          echo "$(date +"%Y%m%d-%T") ERROR $1" | tee -a $log_file
+        else
+          echo "$(date +"%Y%m%d-%T") UNKNOWN $1" | tee -a $log_file
+        fi
+    else
+      if [ -z "$2" ]
+        then
+          echo "$(date +"%Y%m%d-%T") INFO $1"
+        elif [ $2 = "WARNING" ]
+        then
+          echo "$(date +"%Y%m%d-%T") WARNING $1"
+        elif [ $2 = "ERROR" ]
+        then
+          echo "$(date +"%Y%m%d-%T") ERROR $1"
+        else
+          echo "$(date +"%Y%m%d-%T") UNKNOWN $1"
+      fi
+    fi
 }
 
 #time how long the archive takes
@@ -155,8 +172,7 @@ deloldbackups () {
         else
           log "No old paperclip.jar files to delete"
           updateserver
-          #add autoupdate if condition here
-        fi
+      fi
     else [ $autoupdate = "n" ]
       log "Autoupdate function set to NO, going to start server"
       startserver
