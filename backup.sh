@@ -8,7 +8,7 @@ PATH=/opt/minecraft/ #set this to the path you save this file in
 ###### Mandatory fields, fill this all in ####################################
 source="" #directory to be archived ex: /opt/minecraft/
 dest="" #destination for archive ex: /mnt/mcLinuxBackup/
-savemethod="y"  # savemethod does not stop/start the server, sends a "save-off" command
+savemethod=""  # savemethod does not stop/start the server, sends a "save-off" command
                 # to the server
 servicename="" # ex: minecraft-server must match the name of your Minecraft server service
 screensession="" #name of your screen session that the service launches
@@ -213,7 +213,7 @@ startserver () {
 
 if [ $savemethod = "y" ] || [ $savemethod = "n" ]
   then
-    if [ $autoupdate ="y" ] || [ $autoupdate = "n" ]
+    if [[ $autoupdate = "y" ]] || [[ $autoupdate = "n" ]]
       then
         #start of the log file and backup process
         start2=`date +%s`
