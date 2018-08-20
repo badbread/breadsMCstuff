@@ -4,6 +4,8 @@ A small collection (for now) of things I use on my minecraft server.
 - ```backup.sh``` A pretty simple script to backup your entire LINUX Minecraft Server directory to another directory of your choice. It can also auto-update to the latest version of Paper (github.com/PaperMC/Paper) after 'x' number of days. It has some error checking, logs everything it does, auto-deletes old backups after 'x' days and has the ability to alert using Pushover (www.pushover.net).
 - ```minecraft-server.service``` - A Linux service file to run your PaperMC server in a screen session
 
+See a list of To Do's on the wiki page here https://github.com/badbread/breadsMCstuff/wiki.
+
 ## Why and Getting Started
 
 Hopefully you'll find this script of some use, this all started when my personal server crashed and I lost everything. It started on a windows machine with a batch file backup job to a NAS, then to powershell script because I didn't like .bat logging, and now to a full blown ESXi VM with nightly backups and automated updates.
@@ -49,6 +51,7 @@ A few variables must match exactly in your service file and the [backup.sh](./ba
 4. _**tries**_ = this probably isn't needed anymore, description in script.
 5. _**log_file**_ = what the logfile is called and where it's stored (default $dest"log.txt")
 6. _**autoupdate**_ = if you want your paperclip.jar file to automatically update after _**paperclipupdateinterval**_ days
+7. _**log**_ = do you want to log all results to the $dest dir (default is "y")
 
 ### Pushover variables
 1. _**pushtoken**_ = Your pushover API key
