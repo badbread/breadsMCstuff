@@ -11,31 +11,29 @@ pw="password"
 # Store the output of the rcon-cli output to a variable
 tps="$(./rcon-cli --host $host --port $port --password $pw tps)"
 
+
 # Store the output above to an array seperated by ,
-IFS=', ' read -r -a array <<< "$tps"
+IFS='§a' read -r -a array <<< "$tps"
+
+#why is this here??
+echo "<<<rconmc>>>"
+
+# this is 1mTPS
+echo ${array[4]} | tr ',' '\r'
+# This is 5mTPS
+echo ${array[6]} | tr ',' '\r'
+# this is 15m TPS
+echo ${array[8]} | tr ',' '\r'
 
 
-echo ${array[5]} " <- Array5 Value"
-echo ${array[6]} " <- 1m TPS Value"
-echo ${array[7]} " <- 5m TPS Value"
-echo ${array[8]} " <- 15m TPS Value"
-
-tps1=${array[6]}
-tps5=${array[7]}
-tps15=${array[8]}
 
 
-#echo "$1 should be 15m"
-echo $tps1
-echo $tps5
-echo $tps15
 
-### Debug stuff
-# for d3bug
-#echo "The array has ${#array[@]} elements"
 
-#for element in "${array[@]}"
-#    do
-#        echo "$element"
-#      done
-# echo $tps "<- this is the original output"
+tps1m="${array[4]}"
+tps5m="${array[6]}"
+tps15m="${array[8]}"
+
+#echo $tps1m
+#echo $tps5m
+#echo $tps15m
