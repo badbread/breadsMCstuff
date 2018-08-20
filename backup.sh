@@ -1,25 +1,24 @@
 #!/bin/bash
-# This script assumes you have the following: A Paper (www.github.com/PaperMC/Paper)
 # Minecraft Linux server running in a screen installed as a service
 # The user running this script needs permissions to start/stop the Minecraft Server
-# service using sudo without a password prompt (lookup sudoers on google)
-PATH=/opt/minecraft/ #set this to the path you save this file in
+# service using sudo without a password prompt (lookup /etc/sudoers on google)
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/opt/minecraft/
 
 ###### Mandatory fields, fill this all in ####################################
-source="" #directory to be archived ex: /opt/minecraft/
-dest="" #destination for archive ex: /mnt/mcLinuxBackup/
-savemethod=""  # savemethod does not stop/start the server, sends a "save-off" command
-                # to the server
-servicename="" # ex: minecraft-server must match the name of your Minecraft server service
-screensession="" #name of your screen session that the service launches
+source="" #directory to be archived
+dest="" #destination for archive
+savemethod="n" # savemethod does not stop/start the server, sends a "save-off" command
+              # to the server
+servicename="minecraft-server"
+screensession="mcserver" #name of your screen session
 # Make a directory in /minecraft folder called ".jarbackups" it's a hidden folder
 # to place a backup of your old paperclip.jar file
 
 ##### Options ################################################################
-log="y"
-autoupdate="n"
+logging="y"
+autoupdate="y"
 daystokeep="+7" #how many days to keep BACKUP files, must have + sign before number for next 3
-paperupdateinterval="+5" #how many days old the paperclip.jar file needs to be to be upgraded
+paperupdateinterval="+3" #how many days old the paperclip.jar file needs to be to be upgraded
 paperclipjartime="+30" #how many days to keep old paperclip.jar files
 tries="10" #how long to wait for server to close before giving up "value = *2"
 log_file=$dest"log.txt" #place the log file where the backup files go and name it
@@ -27,7 +26,7 @@ log_file=$dest"log.txt" #place the log file where the backup files go and name i
 ###### Pushover variables ####################################################
 pushtoken=""
 pushuser=""
-pushsubject=""
+pushsubject="Minecraft Server"
 
 ###### Other variables shouldn't need to be changed #########################
 day=$(date +%m%d%Y)
@@ -43,7 +42,7 @@ yesterday=$(date +%m%d%Y -d 'yesterday') #for old .jar file deletion and rename
 # syntax: log "YOUR MESSAGE HERE" [options]
 # Arguments are WARN & ERROR. INFO is passed by default with no argument
 log () {
-  if [ log = "y" ]
+  if [ $logging = "y" ]
     then
       if [ -z "$2" ]
         then
@@ -57,7 +56,7 @@ log () {
         else
           echo "$(date +"%Y%m%d-%T") UNKNOWN $1" | tee -a $log_file
         fi
-    else
+    else [ $logging = "n" ]
       if [ -z "$2" ]
         then
           echo "$(date +"%Y%m%d-%T") INFO $1"
@@ -133,7 +132,9 @@ stopserver () {
 create_archive () {
   if [ -e $fullarchivename ]
     then
-      log "Archive already exists $fullarchivename! Stopping backup!" ERROR
+      end2=`date +%s`
+      scriptruntime=$((end2-start2))
+      log "Archive already exists $fullarchivename! Stopping backup in $scriptruntime seconds!" ERROR
       push "ERROR backing up Minecraft, going to startserver function, check the logs!! "
       startserver
     else
@@ -147,28 +148,27 @@ create_archive () {
 
 #Step 3, delete files in the backup dir older than $daystokeep variable
 deloldbackups () {
-  log "Looking for backups on $dest older than $daystokeep days"
-  if [ -f $dest ]
-  #maybe deleteif find $dest -type f -mtime $daystokeep
+  log "Looking for backups on $dest older than $daystokeep days..."
+  if [[ $(find $dest  -type f -ctime $daystokeep ) ]]
     then
-      while read fname; do
-        log "Deleted $fname"
-        rm "$fname"
-        done
+      log "Found old backup files"
+      find $dest  -type f -ctime $daystokeep | while read fname; do
+      log "Deleting jar file $fname"
+      rm "$fname"
+      done
     else
-      log "No old backup files to delete"
+      log "Old backup files not FOUND" WARNING
   fi
-
   if [ $autoupdate = "y" ]
     then
-      if [[ $(find "$jarbackups" -type f -mtime "$paperclipjartime") ]]
+      log "Looking for old paperclip files in $jarbackups older than $paperclipjartime days"
+      if [[ $(find "$jarbackups" -type f -ctime $paperclipjartime ) ]]
         then
-          log "Deleting paperclip.jar files older than $paperclipjartime days"
-          find $jarbackups -name 'paperclip*' -type f -mtime $paperclipjartime | while read fname; do
-            log "Deleting $fname"
-            rm "$fname"
-            updateserver
-          done
+            find $jarbackups -type f -ctime $paperclipjartime | while read fname; do
+              log "Deleting jar file $fname"
+              rm "$fname"
+            done
+          updateserver
         else
           log "No old paperclip.jar files to delete"
           updateserver
@@ -176,7 +176,7 @@ deloldbackups () {
     else [ $autoupdate = "n" ]
       log "Autoupdate function set to NO, going to start server"
       startserver
-    fi
+  fi
 }
 
 #Step 4a, check if an X old version of paperclip exists, if it does, rename it, move it to a backup folder
@@ -203,25 +203,28 @@ updateserver () {
           log "No old paperclip found or it hasn't been $paperupdateinterval days yet, not auto-updating... Starting server"
           startserver
       fi
-#    else
-#      log "I should hopefully never see this error because if it's here, then something is really messed up" ERROR
     fi
 }
 
 #Step 4b, start the $servicename service, send a push that it completed successfully
 startserver () {
+
   if [ $savemethod = "y" ]
     then
       log "Sending Save-on command to server"
       screen -S mcserver -X eval 'stuff "save-on"\\015'
       screen -S mcserver -X eval 'stuff "say Backup has completed!!"\\015'
-      log "Save-on command sent to MC, BACKUP COMPLETE in $runtime2 seconds! ****************************"
-      push "Backup completed, all good."
+      push "Backup completed."
+      end2=`date +%s`
+      scriptruntime=$((end2-start2))
+      log "Save-on command sent to MC, BACKUP COMPLETE in $scriptruntime seconds! ****************************"
   elif [ $savemethod = "n" ]
-  then
-    log "Backup has been completed, BACKUP COMPLETE in $runtime2 seconds!! ******************************"
-    sudo service $servicename start
-    push "Backup completed, all good."
+    then
+      sudo service $servicename start
+      push "Backup completed."
+      end2=`date +%s`
+      scriptruntime=$((end2-start2))
+      log "Backup has been completed, BACKUP COMPLETE in $scriptruntime seconds! ******************************"
   fi
 }
 
@@ -231,14 +234,19 @@ if [ $savemethod = "y" ] || [ $savemethod = "n" ]
   then
     if [[ $autoupdate = "y" ]] || [[ $autoupdate = "n" ]]
       then
-        #start of the log file and backup process
-        start2=`date +%s`
-        log "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+"
-        log "Backup started"
-        stopserver
-      else
-        echo "ERROR! Change the autoupdate variable to a \"y\" or a \"n\""
-      fi
+        if [[ $logging = "y" ]] || [[ $logging = "n" ]]
+          then
+            #start of the log file, timer and backup process
+            start2=`date +%s` #start script timer
+            log "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+"
+            log "Backup started"
+            stopserver
+          else
+            echo "ERROR! Change the logging variable to a \"y\" or a \"n\""
+          fi
+        else
+          echo "ERROR! Change the autoupdate variable to a \"y\" or a \"n\""
+        fi
   else
     echo "ERROR! Change the savemethod variable to a \"y\" or a \"n\""
 fi
