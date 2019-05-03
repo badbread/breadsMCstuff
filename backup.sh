@@ -5,12 +5,13 @@
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/opt/minecraft/
 
 ###### Mandatory fields, fill this all in ####################################
-source="" #directory to be archived
-dest="" #destination for archive
+source="/ENTERAPATHHERE/yourMinecraft_install_dir" #directory to be archived
+dest="/ENTERAPATHHERE/maybe_a_NAS_device" #destination for archive
 savemethod="n" # savemethod does not stop/start the server, sends a "save-off" command
               # to the server
 servicename="minecraft-server"
 screensession="mcserver" #name of your screen session
+# IMPORTANT #
 # Make a directory in /minecraft folder called ".jarbackups" it's a hidden folder
 # to place a backup of your old paperclip.jar file
 
