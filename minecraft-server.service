@@ -16,11 +16,11 @@ Group=mc                      # change "mc" to your user group
 # change: after "-dmS" you must change "mc" to whatever your screen session is/should be
 # change: "-Xms6G" & "-Xmx6G" How much memory you allocate to Java
 ## see here for an explanation: https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/
-# change: at the end, the path and name of the .jar file that runs ex:/minecraft/paperclip.jar
+# change: at the end, the path and name of the .jar file that runs ex: /minecraft/paperclip.jar
 
-ExecStart=/usr/bin/screen -h 2048 -dmS mc java -Xms6G -Xmx6G -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=100 -XX:+DisableExplicitGC -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=50 -XX:G1MaxNewSizePercent=80 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1MixedGCLiveThresholdPercent=50 -XX:+AggressiveOpts -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -Dusing.aikars.flags=mcflags.emc.gs -jar /mc/paperclip.jar
+ExecStart=/usr/bin/screen -h 2048 -dmS mc java -Xms6G -Xmx6G -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=100 -XX:+DisableExplicitGC -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=50 -XX:G1MaxNewSizePercent=80 -XX:G1MixedGCLiveThresholdPercent=35 -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -Dusing.aikars.flags=mcflags.emc.gs -jar paperclip.jar
 
-# you must change the value after "-S" on all the "ExecStop" commands below to the screen session name above
+# you must change the value after "-S" on all the "ExecStop" commands below to the screen session name above (if you changed it)
 ExecStop=/usr/bin/screen -S mc -X eval 'stuff "say SERVER SHUTTING DOWN in 10 seconds!"\\015'
 
 # Wait 10 seconds before sending the shutdown command
