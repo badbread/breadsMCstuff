@@ -197,7 +197,7 @@ updateserver () {
           log "FOUND old paperclip.jar, renaming it to paperclip.$day and moving to $jarbackups folder"
           mv $source/paperclip.jar $jarbackups/paperclip.$day
           log "Downloading latest build of paperclip.jar"
-          wget -q -nd https://papermc.io/api/v1/paper/1.14.1/latest/download -o $source/paperclip.jar
+          wget -q -nd https://papermc.io/api/v1/paper/1.14.1/latest/download -O $source/paperclip.jar
           log "Download finished"
           startserver
         else
